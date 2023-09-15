@@ -32,7 +32,7 @@ class DummyNode(Node):
         # Define data for each shape
         data = {'via_point': []}
         if shape == 'F':
-            data['via_point'] = [[0.0, 0.0], [0.0, 15.0]]
+            data['via_point'] = [[0.0, 0.0], [0.0, 5.0], [5.0, 5.0], [5.0, 0.0], [0.0, 0.0]]
         elif shape == 'I':
             data['via_point'] = [[0.0, 0.0], [0.0, 10.0]]
         elif shape == 'B':
