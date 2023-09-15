@@ -9,6 +9,7 @@ from std_srvs.srv import Empty
 from turtlesim_plus_controller_interface.srv import SetTarget
 import math
 from rclpy.parameter import Parameter
+from rcl_interfaces.msg import ParameterType
 
 class TurtleController(Node):
     def __init__(self):
@@ -16,16 +17,24 @@ class TurtleController(Node):
         self.pub_cmdvel = self.create_publisher(Twist, "cmd_vel", 10)
         self.create_subscription(Pose, "pose", self.pose_callback , 10)
         self.spawn_pizza_client = self.create_client(GivePosition, "/spawn_pizza")
+        self.eat_pizza_client = self.create_client(Empty, "eat")
         self.create_timer(0.01, self.timer_callback)
         self.target = [0.0, 0.0, 0.0]
         self.current_pose = [0.0, 0.0, 0.0]
         self.enableController = False
         self.doSpawnPizza = False
+        self.continuousEating = False
         self.create_service(SetTarget, "go_and_place", self.go_and_place_callback)
         self.create_service(SetTarget, "go", self.go_callback)
         self.declare_parameter(name='linear_gain',value=1.0)
         self.declare_parameter(name='angular_gain',value=5.0)
         self.declare_parameter(name='tolerance',value=0.1)
+
+        if self.get_namespace() == "/Melodic":
+            self.continuousEating = True
+            self.set_parameters([Parameter('linear_gain', value=10.0),
+                                  Parameter('angular_gain', value=30.0),
+                                  Parameter('tolerance', value=0.1)])
 
     def go_and_place_callback(self, request, response):
         if self.enableController:
@@ -69,6 +78,9 @@ class TurtleController(Node):
         return angle
     
     def timer_callback(self):
+        if self.continuousEating:
+            self.eat_pizza_client.call_async(Empty.Request())
+
         if(not self.enableController):
             return
         
@@ -77,7 +89,7 @@ class TurtleController(Node):
         if(abs(distance) < self.get_parameter('tolerance').value):
             self.enableController = False
             self.cmd_vel(0.0, 0.0)
-            if self.doSpawnPizza:
+            if self.doSpawnPizza and not self.continuousEating:
                 self.spawn_pizza(self.current_pose)
                 self.doSpawnPizza = False
             return

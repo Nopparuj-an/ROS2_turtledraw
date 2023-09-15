@@ -20,6 +20,19 @@ character = ["via_point_F.yaml", "via_point_I.yaml", "via_point_B.yaml", "via_po
 my_pkg = get_package_share_directory("turtlesim_plus_controller")
 
 
+def combine_path(context, character):
+    path = []
+    for i in character:
+        with open(os.path.join(my_pkg,'via_point',i), 'r') as file:
+            data = yaml.load(file, Loader=yaml.SafeLoader)["via_point"]
+            path = path + data
+    
+    path += [[10.0, 10.0]]
+
+    with open(os.path.join(my_pkg,'via_point','combined_path.yaml'), 'w') as file:
+        yaml.dump({"via_point": path}, file)
+
+
 def modify_config_namespace(path: str, new_path: str, namespace: str):
     with open(path, 'r') as file:
         data = yaml.load(file, Loader=yaml.SafeLoader)
@@ -107,8 +120,22 @@ def generate_launch_description():
             ]
         )
     )
+
+    melodic_event_handler = RegisterEventHandler(
+        OnProcessExit(
+            target_action=status_checker,
+            on_exit=[
+                LogInfo(msg='Melodic is unleashed!'),
+                ExecuteProcess(cmd=["ros2 service call /spawn_turtle turtlesim/srv/Spawn \"{x: 0.1, y: 0.1, theta: 0.0, name: 'Melodic'}\""], shell=True),
+                ExecuteProcess(cmd=["ros2 run turtlesim_plus_controller turtle_controller.py --ros-args -r __ns:=/Melodic"], shell=True),
+                ExecuteProcess(cmd=["ros2 run turtlesim_plus_controller turtle_scheduler.py --ros-args -r __ns:=/Melodic -f \"combined_path.yaml\""], shell=True),
+            ]
+        )
+    )
+
     launch_description.add_action(config_launch_arg)
     launch_description.add_action(path_generator)
+    launch_description.add_action(OpaqueFunction(function=combine_path, args=[character]))
     launch_description.add_action(turtlesim_plus)
     launch_description.add_action(exit_event_handler)
     launch_description.add_action(remove_turtle1)
@@ -117,6 +144,7 @@ def generate_launch_description():
     launch_description.add_action(OpaqueFunction(function=create_controller, args=[launch_description,config_path]))
     launch_description.add_action(OpaqueFunction(function=create_scheduler, args=[launch_description]))
     launch_description.add_action(status_checker)
+    launch_description.add_action(melodic_event_handler)
     return launch_description
 
 # ros2 launch turtlesim_plus_controller turtlesimplus.launch.py
