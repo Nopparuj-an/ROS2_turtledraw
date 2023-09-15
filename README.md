@@ -19,8 +19,9 @@ source install/setup.bash
 ## Usage
 Launch the `turtlesim_plus_controller` package
 ```bash
-ros2 launch turtlesim_plus_controller turtlesimplus.launch.py
+ros2 launch turtlesim_plus_controller turtlesimplus.launch.py config_path:="controller_config_1.yaml"
 ```
+You can select between `controller_config_1.yaml` and `controller_config_2.yaml` to change the speed of the turtles.
 
 <br>
 
