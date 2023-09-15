@@ -28,6 +28,7 @@ ament_python_install_package(${PROJECT_NAME})
 # Install Python executables
 install(PROGRAMS
   scripts/turtle_controller.py
+  scripts/turtle_scheduler.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -48,6 +49,9 @@ install(TARGETS
 ################ INSTALL LAUNCH, ETC #################
 install(DIRECTORY
   # add directories here
+  via_point
+  launch
+  config
   DESTINATION share/${PROJECT_NAME})
 
 ament_package()
