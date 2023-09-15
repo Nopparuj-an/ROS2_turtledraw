@@ -29,6 +29,7 @@ ament_python_install_package(${PROJECT_NAME})
 install(PROGRAMS
   scripts/turtle_controller.py
   scripts/turtle_scheduler.py
+  scripts/path_generator.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

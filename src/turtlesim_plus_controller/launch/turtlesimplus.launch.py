@@ -63,7 +63,13 @@ def generate_launch_description():
         shell=True,
     )
 
+    path_generator = Node(
+        package="turtlesim_plus_controller",
+        executable="path_generator.py",
+    )
 
+
+    launch_description.add_action(path_generator)
     launch_description.add_action(turtlesim_plus)
     launch_description.add_action(remove_turtle1)
     launch_description.add_action(OpaqueFunction(function=spawn_turtle, args=[launch_description]))
