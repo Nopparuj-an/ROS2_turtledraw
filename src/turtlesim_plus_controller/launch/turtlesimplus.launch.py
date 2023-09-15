@@ -85,6 +85,11 @@ def generate_launch_description():
         executable="path_generator.py",
     )
 
+    status_checker = Node(
+        package="turtlesim_plus_controller",
+        executable="status_checker.py",
+    )
+
     # exit_event_handler = RegisterEventHandler(
     #     OnProcessExit(
     #         target_action=turtlesim_plus,
@@ -103,6 +108,7 @@ def generate_launch_description():
 
     launch_description.add_action(OpaqueFunction(function=create_controller, args=[launch_description]))
     launch_description.add_action(OpaqueFunction(function=create_scheduler, args=[launch_description]))
+    launch_description.add_action(status_checker)
     return launch_description
 
 # ros2 launch turtlesim_plus_controller turtlesimplus.launch.py

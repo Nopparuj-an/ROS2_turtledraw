@@ -30,6 +30,7 @@ install(PROGRAMS
   scripts/turtle_controller.py
   scripts/turtle_scheduler.py
   scripts/path_generator.py
+  scripts/status_checker.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

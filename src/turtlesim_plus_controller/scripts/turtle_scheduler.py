@@ -24,18 +24,21 @@ class TurtleScheduler(Node):
             self.data = yaml.load(file, Loader=yaml.SafeLoader)["via_point"]
 
         def go_and_place_svc(pos):
-            request = SetTarget.Request()
-            request.target.x = pos[0]
-            request.target.y = pos[1]
-            svc_call = self.set_target_client.call_async(request)
-            rclpy.spin_until_future_complete(self, svc_call)
-            res = svc_call.result().result
-            return res
+            try:
+                request = SetTarget.Request()
+                request.target.x = pos[0]
+                request.target.y = pos[1]
+                svc_call = self.set_target_client.call_async(request)
+                rclpy.spin_until_future_complete(self, svc_call, timeout_sec=1.0)
+                res = svc_call.result().result
+                return res
+            except Exception as e:
+                if e is KeyboardInterrupt:
+                    exit()
+                return False
 
         for i in self.data:
-            # print(i)
             while(not go_and_place_svc(i)):
-                # print(i)
                 pass
 
         exit()
