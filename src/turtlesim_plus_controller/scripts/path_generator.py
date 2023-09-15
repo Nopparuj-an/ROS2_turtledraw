@@ -11,7 +11,7 @@ class DummyNode(Node):
     def __init__(self):
         super().__init__('path_node')
         pkg_path = get_package_share_directory('turtlesim_plus_controller')
-
+        self.declare_parameter(name='pizza_amt',value=50)
         # Define the paths for the four YAML files
         yaml_files = [
             ('via_point_F.yaml'),
@@ -23,35 +23,36 @@ class DummyNode(Node):
         self.trajec = []
 
         # Iterate through the YAML files and generate them
+        pizza_amt = 1 * self.get_parameter('pizza_amt').value
         for yaml_file in yaml_files:
             shape = yaml_file[10]
             via_point_path = os.path.join(pkg_path, 'via_point', yaml_file)
-            self.generate_shape_yaml(via_point_path, shape)
+            self.generate_shape_yaml(via_point_path, shape, int(pizza_amt))
         exit()
 
-    def generate_shape_yaml(self, path: str, shape: str):
+    def generate_shape_yaml(self, path: str, shape: str, pizza_amt: int):
         # Define data for each shape
         data = {'via_point': []}
         if shape == 'F':
-            self.generate_letter_F_path(20,2,7,1)
+            self.generate_letter_F_path(pizza_amt,2,7,1)
             data['via_point'] = self.trajec.tolist()
 
         elif shape == 'I':
             hint_target = [[0.0, 0.0], [0.0, 3.0]]
             segments = 1
-            self.generate_letter_path(hint_target,segments,20,7,7,1)
+            self.generate_letter_path(hint_target,segments, pizza_amt, 7, 7, 1)
             data['via_point'] = self.trajec.tolist()
 
         elif shape == 'B':
             hint_target = [[0.0, 0.0], [0.0, 3.0],[1.5, 2.25],[0, 1.5], [1.5, 0.75], [0.0,0.0]]
             segments = 5
-            self.generate_letter_path(hint_target,segments,20,2,2,1)
+            self.generate_letter_path(hint_target,segments, pizza_amt, 2, 2, 1)
             data['via_point'] = self.trajec.tolist()
             
         elif shape == 'O':
             hint_target = [[0.0, 0.0], [0.0, 3.0],[1.5, 3.0],[1.5, 0.0], [0.0, 0.0]]
             segments = 4
-            self.generate_letter_path(hint_target,segments,20,7,2,1)
+            self.generate_letter_path(hint_target,segments, pizza_amt, 7, 2, 1)
             data['via_point'] = self.trajec.tolist()
 
         else:
@@ -98,6 +99,8 @@ class DummyNode(Node):
         last_y = y[-1]
 
         loss = point%line
+        print(point%line)
+        print("-"*100)
         for i in range(loss):
             x.append(last_x)
             y.append(last_y) 
