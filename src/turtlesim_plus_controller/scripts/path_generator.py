@@ -11,19 +11,19 @@ class DummyNode(Node):
     def __init__(self):
         super().__init__('path_node')
         pkg_path = get_package_share_directory('turtlesim_plus_controller')
-        self.declare_parameter(name='pizza_amt',value=50)
-        # Define the paths for the four YAML files
+
+        self.declare_parameter(name='pizza_amt',value=20)
+
         yaml_files = [
             ('via_point_F.yaml'),
             ('via_point_I.yaml'),
             ('via_point_B.yaml'),
             ('via_point_O.yaml')
         ]
-        # Initialize the 'trajec' attribute
         self.trajec = []
-
-        # Iterate through the YAML files and generate them
         pizza_amt = 1 * self.get_parameter('pizza_amt').value
+        print(pizza_amt)
+        print("-"*100)
         for yaml_file in yaml_files:
             shape = yaml_file[10]
             via_point_path = os.path.join(pkg_path, 'via_point', yaml_file)
@@ -31,7 +31,6 @@ class DummyNode(Node):
         exit()
 
     def generate_shape_yaml(self, path: str, shape: str, pizza_amt: int):
-        # Define data for each shape
         data = {'via_point': []}
         if shape == 'F':
             self.generate_letter_F_path(pizza_amt,2,7,1)

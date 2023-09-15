@@ -91,6 +91,9 @@ def generate_launch_description():
     config_launch_arg = DeclareLaunchArgument('config_path',default_value='controller_config_1.yaml')
     config_path = LaunchConfiguration('config_path')
 
+    pizza_amt_launch_arg = DeclareLaunchArgument('pizza_amt',default_value="20")
+    pizza_amt = LaunchConfiguration('pizza_amt')
+
     turtlesim_plus = Node(
         package="turtlesim_plus",
         executable="turtlesim_plus_node.py",
@@ -104,6 +107,7 @@ def generate_launch_description():
     path_generator = Node(
         package="turtlesim_plus_controller",
         executable="path_generator.py",
+        parameters=[{"pizza_amt": pizza_amt}]
     )
 
     status_checker = Node(
@@ -134,6 +138,7 @@ def generate_launch_description():
     )
 
     launch_description.add_action(config_launch_arg)
+    launch_description.add_action(pizza_amt_launch_arg)
     launch_description.add_action(path_generator)
     launch_description.add_action(OpaqueFunction(function=combine_path, args=[character]))
     launch_description.add_action(turtlesim_plus)
