@@ -20,6 +20,7 @@ class TurtleController(Node):
         self.target = [0.0, 0.0, 0.0]
         self.current_pose = [0.0, 0.0, 0.0]
         self.enableController = False
+        self.doSpawnPizza = False
         self.create_service(SetTarget, "go_and_place", self.go_and_place_callback)
         self.create_service(SetTarget, "go", self.go_callback)
         self.declare_parameter(name='linear_gain',value=1.0)
@@ -31,12 +32,14 @@ class TurtleController(Node):
             response.result = False
         else:
             self.target = [request.target.x, request.target.y, 0]
+            self.doSpawnPizza = True
             self.enableController = True
             response.result = True
         return response
     
     def go_callback(self, request, response):
         self.target = [request.target.x, request.target.y, 0]
+        self.doSpawnPizza = False
         self.enableController = True
         response.result = True
         return response
@@ -74,7 +77,9 @@ class TurtleController(Node):
         if(abs(distance) < self.get_parameter('tolerance').value):
             self.enableController = False
             self.cmd_vel(0.0, 0.0)
-            self.spawn_pizza(self.current_pose)
+            if self.doSpawnPizza:
+                self.spawn_pizza(self.current_pose)
+                self.doSpawnPizza = False
             return
         P_distance = distance * self.get_parameter('linear_gain').value  # Kp value (2)
         
