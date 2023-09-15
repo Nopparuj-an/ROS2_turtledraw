@@ -21,6 +21,7 @@ class TurtleController(Node):
         self.current_pose = [0.0, 0.0, 0.0]
         self.enableController = False
         self.create_service(SetTarget, "go_and_place", self.go_and_place_callback)
+        self.create_service(SetTarget, "go", self.go_callback)
 
     def go_and_place_callback(self, request, response):
         if self.enableController:
@@ -29,6 +30,12 @@ class TurtleController(Node):
             self.target = [request.target.x, request.target.y, 0]
             self.enableController = True
             response.result = True
+        return response
+    
+    def go_callback(self, request, response):
+        self.target = [request.target.x, request.target.y, 0]
+        self.enableController = True
+        response.result = True
         return response
     
     def spawn_pizza(self, position):

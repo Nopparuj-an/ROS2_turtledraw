@@ -8,6 +8,9 @@ from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch import LaunchDescription, LaunchContext
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
+from launch.actions import EmitEvent, LogInfo, RegisterEventHandler
+from launch.event_handlers import OnProcessExit
+from launch.events import Shutdown
 import os
 import yaml
 
@@ -68,9 +71,19 @@ def generate_launch_description():
         executable="path_generator.py",
     )
 
+    exit_event_handler = RegisterEventHandler(
+        OnProcessExit(
+            target_action=turtlesim_plus,
+            on_exit=[
+                LogInfo(msg='closed the turtlesim window'),
+                EmitEvent(event=Shutdown(reason='Window closed'))
+            ]
+        )
+    )
 
     launch_description.add_action(path_generator)
     launch_description.add_action(turtlesim_plus)
+    launch_description.add_action(exit_event_handler)
     launch_description.add_action(remove_turtle1)
     launch_description.add_action(OpaqueFunction(function=spawn_turtle, args=[launch_description]))
     launch_description.add_action(OpaqueFunction(function=create_controller, args=[launch_description]))
