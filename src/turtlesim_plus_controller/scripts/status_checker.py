@@ -40,7 +40,7 @@ class StatusChecker(Node):
                     self.phase = 2
                     self.all_go_top_right()
             if self.phase == 2:
-                pass
+                exit()
 
 
 def main(args=None):
