@@ -19,14 +19,16 @@ source install/setup.bash
 ## Usage
 Launch the `turtlesim_plus_controller` package
 ```bash
-ros2 launch turtlesim_plus_controller turtlesimplus.launch.py config_path:="controller_config_1.yaml"
+ros2 launch turtlesim_plus_controller turtlesimplus.launch.py config_path:="controller_config_1.yaml" pizza_amt:=20
 ```
 You can select between `controller_config_1.yaml` and `controller_config_2.yaml` to change the speed of the turtles.
 
 <br>
 
 ## System Architecture
-![System Architecture]()
+<p align="center">
+  <img src="https://github.com/Nopparuj-an/FRA501_exam1_6434_6438/blob/main/system_architecture.jpg?raw=true">
+</p>
 
 <br>
 
@@ -42,7 +44,7 @@ You can select between `controller_config_1.yaml` and `controller_config_2.yaml`
 - **path_generator.py**: A node that generates YAML files for each turtle to follow.
 - **turtle_controller.py**: A node that controls the turtlesim_plus node to reach target and drop a pizza.
 - **turtle_scheduler.py**: The node that controls the turtlesim_plus node by sending targets to draw the word "FIBO".
-- **status_checker.py**: A python script that checks the status of the turtlesim_plus node and move all turtle to top right on completion.
+- **status_checker.py**: A python script that checks the status of the turtlesim_plus node and move all turtle to top right on completion. It also trigger the launch file to spawn Melodic, the destructor turtle.
 
 ### turtlesim_plus_controller_interface
 - The node that provides a custom service so the controller and scheduler can communicate.
@@ -55,14 +57,18 @@ You can select between `controller_config_1.yaml` and `controller_config_2.yaml`
     - Subscribes to `/<namespace>/cmd_vel` to move the turtle.
     - Publishes to `/<namespace>/pose` to get the turtle's position.
     - Svc server to `/spawn_pizza` to drop a pizza.
+    - Svc server to `/<namespace>/eat` to let Melodic eat pizza.
 - **path_generator.py** do not interact with any other node. Is called by the launch file.
+    - Receive parameters `pizza_amt` from the launch file for pizza per character (Defaults to 20).
 - **turtle_controller.py**
     - Publishes to `/<namespace>/cmd_vel` to move the turtle.
     - Subscribes to `/<namespace>/pose` to get the turtle's position.
     - Svc client to `/<namespace>/spawn_pizza` to drop a pizza.
+    - Svc client to `/<namespace>/eat` to let Melodic eat pizza.
     - Svc server to `/<namespace>/go` to get target location.
     - Svc server to `/<namespace>/go_and_place` to get target location to drop a pizza.
 - **turtle_scheduler.py**
+    - Receive parameters `config_path` from the launch file to get the YAML file path.
     - Svc client to `/<namespace>/go_and_place` to set target location to drop a pizza.
     - Parameter `-f` to get viapoints from the YAML file path.
 - **status_checker.py**
