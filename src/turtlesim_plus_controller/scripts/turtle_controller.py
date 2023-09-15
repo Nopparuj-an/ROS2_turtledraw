@@ -58,6 +58,13 @@ class TurtleController(Node):
         cmd_vel.angular.z = w
         self.pub_cmdvel.publish(cmd_vel)
 
+    def wrap_angle(self,angle):
+        while angle > math.pi:
+            angle -= 2 * math.pi
+        while angle < -math.pi:
+            angle += 2 * math.pi
+        return angle
+    
     def timer_callback(self):
         if(not self.enableController):
             return
@@ -72,8 +79,8 @@ class TurtleController(Node):
         P_distance = distance * self.get_parameter('linear_gain').value  # Kp value (2)
         
         # Calculate angle between current pose and target
-        angle = math.atan2(self.current_pose[1] - self.target[1], self.current_pose[0] - self.target[0]) + math.pi
-        error_angle = angle - (self.current_pose[2] + 2 * math.pi) % (2 * math.pi)
+        angle = math.atan2(-1*self.current_pose[1] + self.target[1], -1*self.current_pose[0] + self.target[0])
+        error_angle = self.wrap_angle(angle - self.current_pose[2])
         P_angle = error_angle * self.get_parameter('angular_gain').value  # Kp value (10)
         if(abs(error_angle) > math.pi):
             P_angle *= -1
