@@ -8,7 +8,7 @@ from turtlesim_plus_interfaces.srv import GivePosition
 from std_srvs.srv import Empty
 from turtlesim_plus_controller_interface.srv import SetTarget
 import math
-
+from rclpy.parameter import Parameter
 
 class TurtleController(Node):
     def __init__(self):
@@ -22,6 +22,9 @@ class TurtleController(Node):
         self.enableController = False
         self.create_service(SetTarget, "go_and_place", self.go_and_place_callback)
         self.create_service(SetTarget, "go", self.go_callback)
+        self.declare_parameter(name='linear_gain',value=1.0)
+        self.declare_parameter(name='angular_gain',value=5.0)
+        self.declare_parameter(name='tolerance',value=0.1)
 
     def go_and_place_callback(self, request, response):
         if self.enableController:
@@ -61,17 +64,17 @@ class TurtleController(Node):
         
         # Calculate distance between current pose and target
         distance = math.sqrt((self.current_pose[0] - self.target[0])**2 + (self.current_pose[1] - self.target[1])**2)
-        if(abs(distance) < 0.2):
+        if(abs(distance) < self.get_parameter('tolerance').value):
             self.enableController = False
             self.cmd_vel(0.0, 0.0)
             self.spawn_pizza(self.current_pose)
             return
-        P_distance = distance * 2  # Kp value (2)
+        P_distance = distance * self.get_parameter('linear_gain').value  # Kp value (2)
         
         # Calculate angle between current pose and target
         angle = math.atan2(self.current_pose[1] - self.target[1], self.current_pose[0] - self.target[0]) + math.pi
         error_angle = angle - (self.current_pose[2] + 2 * math.pi) % (2 * math.pi)
-        P_angle = error_angle * 10  # Kp value (10)
+        P_angle = error_angle * self.get_parameter('angular_gain').value  # Kp value (10)
         if(abs(error_angle) > math.pi):
             P_angle *= -1
 

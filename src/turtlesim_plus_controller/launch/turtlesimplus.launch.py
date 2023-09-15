@@ -54,10 +54,7 @@ def create_controller(context: LaunchContext, launch_description:LaunchDescripti
             package="turtlesim_plus_controller",
             executable="turtle_controller.py",
             namespace=turtle,
-            parameters=[#new_config_path,
-                {"angular_gain": 100.0},
-                 {"linear_gain": 25.0}
-                ],
+            parameters=[new_config_path],
         )
         launch_description.add_action(controller)
 
