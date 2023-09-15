@@ -35,15 +35,25 @@ class DummyNode(Node):
         if shape == 'F':
             self.generate_letter_F_path(20,2,7,1)
             data['via_point'] = self.trajec.tolist()
+
         elif shape == 'I':
-            self.generate_letter_I_path(20,7,7,1)
+            hint_target = [[0.0, 0.0], [0.0, 3.0]]
+            segments = 1
+            self.generate_letter_path(hint_target,segments,20,7,7,1)
             data['via_point'] = self.trajec.tolist()
+
         elif shape == 'B':
-            self.generate_letter_B_path(20,2,2,1)
+            hint_target = [[0.0, 0.0], [0.0, 3.0],[1.5, 2.25],[0, 1.5], [1.5, 0.75], [0.0,0.0]]
+            segments = 5
+            self.generate_letter_path(hint_target,segments,20,2,2,1)
             data['via_point'] = self.trajec.tolist()
+            
         elif shape == 'O':
-            self.generate_letter_O_path(20,7,2,1)
+            hint_target = [[0.0, 0.0], [0.0, 3.0],[1.5, 3.0],[1.5, 0.0], [0.0, 0.0]]
+            segments = 4
+            self.generate_letter_path(hint_target,segments,20,7,2,1)
             data['via_point'] = self.trajec.tolist()
+
         else:
             self.get_logger().error(f"Unsupported shape: {shape}")
 
@@ -95,68 +105,7 @@ class DummyNode(Node):
         self.trajec = np.column_stack((x, y))
 
 
-    def generate_letter_I_path(self,n, xoffset, yoffset, scaled):
-        coordinates = [[0.0, 0.0], [0.0, 3.0]]
-        num_segments = 1
-        total_points = n
-
-        x = []
-        y = []
-
-        for i in range(num_segments):
-            # Calculate the number of points for this line segment
-            points_in_segment = total_points // (num_segments - i)
-            
-            # coordinates for the current segment
-            x1, y1 = coordinates[i]
-            x2, y2 = coordinates[i + 1]
-
-            # Generate points for the current segment
-            for j in range(points_in_segment):
-                t = j / (points_in_segment - 1)  # Interpolation parameter [0, 1]
-                x_point = x1 + (x2 - x1) * t
-                y_point = y1 + (y2 - y1) * t
-                x.append((x_point + xoffset) * scaled)
-                y.append((y_point + yoffset) * scaled)
-
-            # Update the remaining number of points
-            total_points -= points_in_segment
-
-        self.trajec = np.column_stack((x, y))
-
-    def generate_letter_B_path(self,n, xoffset, yoffset, scaled):
-        coordinates = [[0.0, 0.0], [0.0, 3.0],[1.5, 2.25],[0, 1.5], [1.5, 0.75], [0.0,0.0]]
-        num_segments = 5
-        total_points = n
-
-        x = []
-        y = []
-
-        for i in range(num_segments):
-            # Calculate the number of points for this line segment
-            points_in_segment = total_points // (num_segments - i)
-            
-            # coordinates for the current segment
-            x1, y1 = coordinates[i]
-            x2, y2 = coordinates[i + 1]
-
-            # Generate points for the current segment
-            for j in range(points_in_segment):
-                t = j / (points_in_segment - 1)  # Interpolation parameter [0, 1]
-                x_point = x1 + (x2 - x1) * t
-                y_point = y1 + (y2 - y1) * t
-                x.append((x_point + xoffset) * scaled)
-                y.append((y_point + yoffset) * scaled)
-
-            # Update the remaining number of points
-            total_points -= points_in_segment
-
-        self.trajec = np.column_stack((x, y))
-        
-
-    def generate_letter_O_path(self,n, xoffset, yoffset, scaled):
-        coordinates = [[0.0, 0.0], [0.0, 3.0],[1.5, 3.0],[1.5, 0.0], [0.0, 0.0]]
-        num_segments = 4
+    def generate_letter_path(self,coordinates,num_segments,n, xoffset, yoffset, scaled):
         total_points = n
 
         x = []
