@@ -1,0 +1,28 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/nopparuj/FRA501_exam1_6434_6438/install/turtlesim_plus_interfaces/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_exam1_6434_6438/install/turtlesim_plus_controller/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_exam1_6434_6438/install/turtlesim_plus/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_ws/install/turtlesim_plus_interfaces/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_ws/install/turtlesim_plus/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_ws/install/turtlesim_interfaces/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_ws/install/turtlesim_control/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_ws/install/my_controller_interface/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_ws/install/my_controller/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/nopparuj/FRA501_exam1_6434_6438/install/turtlesim_plus_interfaces/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_exam1_6434_6438/install/turtlesim_plus_controller/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_exam1_6434_6438/install/turtlesim_plus/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_ws/install/turtlesim_plus_interfaces/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_ws/install/turtlesim_plus/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_ws/install/turtlesim_interfaces/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_ws/install/turtlesim_control/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_ws/install/my_controller_interface/local/lib/python3.10/dist-packages",
+        "/home/nopparuj/FRA501_ws/install/my_controller/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}

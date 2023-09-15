@@ -1,0 +1,9 @@
+{
+  "package_name": "turtlesim_plus_interfaces",
+  "non_idl_tuples": [
+    "/home/nopparuj/FRA501_exam1_6434_6438/src/turtlesim_plus/turtlesim_plus_interfaces:msg/ScannerData.msg",
+    "/home/nopparuj/FRA501_exam1_6434_6438/src/turtlesim_plus/turtlesim_plus_interfaces:msg/ScannerDataArray.msg",
+    "/home/nopparuj/FRA501_exam1_6434_6438/src/turtlesim_plus/turtlesim_plus_interfaces:srv/GivePosition.srv",
+    "/home/nopparuj/FRA501_exam1_6434_6438/src/turtlesim_plus/turtlesim_plus_interfaces:action/GetData.action"
+  ]
+}

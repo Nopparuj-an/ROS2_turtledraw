@@ -1,0 +1,25 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/nopparuj/FRA501_exam1_6434_6438/install/turtlesim_plus_interfaces/include/**",
+        "/home/nopparuj/FRA501_ws/install/turtlesim_plus_interfaces/include/**",
+        "/home/nopparuj/FRA501_ws/install/turtlesim_interfaces/include/**",
+        "/home/nopparuj/FRA501_ws/install/my_controller_interface/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/nopparuj/FRA501_exam1_6434_6438/src/turtlesim_plus_controller/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
