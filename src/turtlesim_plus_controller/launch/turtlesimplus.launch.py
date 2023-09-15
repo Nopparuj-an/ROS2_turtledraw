@@ -16,6 +16,7 @@ import yaml
 
 
 turtles = ["Foxy", "Neotic", "Humble", "Iron"]
+character = ["via_point_F.yaml", "via_point_I.yaml", "via_point_B.yaml", "via_point_O.yaml"]
 my_pkg = get_package_share_directory("turtlesim_plus_controller")
 
 
@@ -53,6 +54,19 @@ def create_controller(context: LaunchContext, launch_description:LaunchDescripti
         launch_description.add_action(controller)
 
 
+def create_scheduler(context: LaunchContext, launch_description:LaunchDescription):
+    for i in range(len(turtles)):
+        viapoint_path = os.path.join(my_pkg,'via_point',character[i])
+        scheduler = Node(
+            package="turtlesim_plus_controller",
+            executable="turtle_scheduler.py",
+            namespace=turtles[i],
+            arguments=['-f',viapoint_path]
+        )
+        launch_description.add_action(scheduler)
+        
+            
+
 def generate_launch_description():
     launch_description = LaunchDescription()
 
@@ -86,7 +100,9 @@ def generate_launch_description():
     # launch_description.add_action(exit_event_handler)
     launch_description.add_action(remove_turtle1)
     launch_description.add_action(OpaqueFunction(function=spawn_turtle, args=[launch_description]))
+
     launch_description.add_action(OpaqueFunction(function=create_controller, args=[launch_description]))
+    launch_description.add_action(OpaqueFunction(function=create_scheduler, args=[launch_description]))
     return launch_description
 
 # ros2 launch turtlesim_plus_controller turtlesimplus.launch.py

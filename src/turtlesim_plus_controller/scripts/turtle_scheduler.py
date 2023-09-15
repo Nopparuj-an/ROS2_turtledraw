@@ -9,12 +9,14 @@ from std_srvs.srv import Empty
 from turtlesim_plus_controller_interface.srv import SetTarget
 from ament_index_python.packages import get_package_share_directory
 import math
+import time
 import yaml, argparse, os
 
 my_pkg = get_package_share_directory("turtlesim_plus_controller")
 
 class TurtleScheduler(Node):
     def __init__(self, file_path):
+        time.sleep(1)
         super().__init__('turtle_scheduler')
         self.set_target_client = self.create_client(SetTarget, "go_and_place")
 
