@@ -31,12 +31,12 @@ class TurtleScheduler(Node):
             return res
 
         for i in self.data:
-            print(i)
+            # print(i)
             while(not go_and_place_svc(i)):
-                print(i)
+                # print(i)
                 pass
 
-        # exit()
+        exit()
 
 
 def main(args=None):
@@ -54,4 +54,4 @@ if __name__=='__main__':
     main()
 
 # running this node with namespace
-# ros2 run turtlesim_plus_controller turtle_scheduler.py --ros-args -r __ns:=/turtle1
+# ros2 run turtlesim_plus_controller turtle_scheduler.py --ros-args -r __ns:=/Foxy -f "via_point_F.yaml"
