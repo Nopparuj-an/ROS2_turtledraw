@@ -25,6 +25,7 @@ You can select between `controller_config_1.yaml` and `controller_config_2.yaml`
 ```bash
 ros2 launch turtlesim_plus_controller turtlesimplus.launch.py config_path:="controller_config_2.yaml" pizza_amt:=20
 ```
+**If the launch complains about missing folder on the first run, please try running again.**
 
 <br>
 
