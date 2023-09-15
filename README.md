@@ -19,9 +19,12 @@ source install/setup.bash
 ## Usage
 Launch the `turtlesim_plus_controller` package
 ```bash
-ros2 launch turtlesim_plus_controller turtlesimplus.launch.py config_path:="controller_config_1.yaml" pizza_amt:=20
+ros2 launch turtlesim_plus_controller turtlesimplus.launch.py
 ```
-You can select between `controller_config_1.yaml` and `controller_config_2.yaml` to change the speed of the turtles.
+You can select between `controller_config_1.yaml` and `controller_config_2.yaml` to change the speed of the turtles. You can also specify the amount of pizza per character by adjusting `pizza_amt`
+```bash
+ros2 launch turtlesim_plus_controller turtlesimplus.launch.py config_path:="controller_config_2.yaml" pizza_amt:=20
+```
 
 <br>
 
