@@ -32,15 +32,16 @@ ros2 launch turtlesim_plus_controller turtlesimplus.launch.py
 ## Packages and nodes
 
 ### turtlesim_plus
-- **turtlesim_plus_node**: A modified version of the turtlesim node by AJ.Pi.
+- **turtlesim_plus_node.py**: A modified version of the turtlesim node by AJ.Pi.
 
 ### turtlesim_plus_interface
 - A package that provides a custom service for turtlesim_plus_node.
 
 ### turtlesim_plus_controller
-- **path_generator**: A node that generates YAML files for each turtle to follow.
-- **turtle_controller**: A node that controls the turtlesim_plus node to reach target and drop a pizza.
-- **turtle_scheduler**: The node that controls the turtlesim_plus node by sending targets to draw the word "FIBO".
+- **path_generator.py**: A node that generates YAML files for each turtle to follow.
+- **turtle_controller.py**: A node that controls the turtlesim_plus node to reach target and drop a pizza.
+- **turtle_scheduler.py**: The node that controls the turtlesim_plus node by sending targets to draw the word "FIBO".
+- **status_checker.py**: A python script that checks the status of the turtlesim_plus node and move all turtle to top right on completion.
 
 ### turtlesim_plus_controller_interface
 - The node that provides a custom service so the controller and scheduler can communicate.
@@ -49,17 +50,20 @@ ros2 launch turtlesim_plus_controller turtlesimplus.launch.py
 
 ## Nodes interaction
 
-- **turtlesim_plus_node**
+- **turtlesim_plus_node.py**
     - Subscribes to `/<namespace>/cmd_vel` to move the turtle.
     - Publishes to `/<namespace>/pose` to get the turtle's position.
     - Svc server to `/spawn_pizza` to drop a pizza.
-- **path_generator** do not interact with any other node. Is called by the launch file.
-- **turtle_controller**
+- **path_generator.py** do not interact with any other node. Is called by the launch file.
+- **turtle_controller.py**
     - Publishes to `/<namespace>/cmd_vel` to move the turtle.
     - Subscribes to `/<namespace>/pose` to get the turtle's position.
     - Svc client to `/<namespace>/spawn_pizza` to drop a pizza.
     - Svc server to `/<namespace>/go` to get target location.
     - Svc server to `/<namespace>/go_and_place` to get target location to drop a pizza.
-- **turtle_scheduler**
+- **turtle_scheduler.py**
     - Svc client to `/<namespace>/go_and_place` to set target location to drop a pizza.
     - Parameter `-f` to get viapoints from the YAML file path.
+- **status_checker.py**
+    - Svc client to `/<namespace>/go` to set target location.
+    - `get_node_names()` to scan for running scheduler nodes.
