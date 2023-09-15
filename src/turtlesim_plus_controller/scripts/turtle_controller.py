@@ -15,7 +15,7 @@ class TurtleController(Node):
         super().__init__('turtle_controller')
         self.pub_cmdvel = self.create_publisher(Twist, "cmd_vel", 10)
         self.create_subscription(Pose, "pose", self.pose_callback , 10)
-        self.spawn_pizza_client = self.create_client(GivePosition, "spawn_pizza")
+        self.spawn_pizza_client = self.create_client(GivePosition, "/spawn_pizza")
         self.create_timer(0.01, self.timer_callback)
         self.target = [0.0, 0.0, 0.0]
         self.current_pose = [0.0, 0.0, 0.0]
@@ -27,7 +27,6 @@ class TurtleController(Node):
             response.result = False
         else:
             self.target = [request.target.x, request.target.y, 0]
-            self.spawn_pizza(self.target)
             self.enableController = True
             response.result = True
         return response
@@ -42,7 +41,6 @@ class TurtleController(Node):
         self.current_pose[0] = msg.x
         self.current_pose[1] = msg.y
         self.current_pose[2] = msg.theta
-        print(self.current_pose)
 
     def cmd_vel(self, vx, w):
         cmd_vel = Twist()
@@ -86,3 +84,8 @@ if __name__=='__main__':
 
 # running this node with namespace
 # ros2 run turtlesim_plus_controller turtle_controller.py --ros-args -r __ns:=/turtle1
+
+# ros2 service call /turtle1/go_and_place turtlesim_plus_controller_interface/srv/SetTarget "target:
+#  x: 5.0
+#  y: 5.0
+#  z: 0.0" 
