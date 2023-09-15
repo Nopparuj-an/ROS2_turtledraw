@@ -30,10 +30,10 @@ def modify_config_namespace(path: str, new_path: str, namespace: str):
         yaml.dump(new_data, file)
 
 
-def render_namespace(context: LaunchContext, launch_description:LaunchDescription):
+def render_namespace(context: LaunchContext,launch_description: LaunchDescription):
     pass
 
-
+    
 def spawn_turtle(context: LaunchContext, launch_description:LaunchDescription):
     for turtle in turtles:
         spawn_turtle = ExecuteProcess(
@@ -43,13 +43,21 @@ def spawn_turtle(context: LaunchContext, launch_description:LaunchDescription):
         launch_description.add_action(spawn_turtle)
 
 
-def create_controller(context: LaunchContext, launch_description:LaunchDescription):
+def create_controller(context: LaunchContext, launch_description:LaunchDescription,namespace: LaunchConfiguration):
+    config_file_string = context.perform_substitution(namespace)
+    config_path = os.path.join(my_pkg,'config',config_file_string)
     for turtle in turtles:
+        new_config_path = os.path.join(my_pkg,'config','controller_config_'+turtle+'.yaml')
+        modify_config_namespace(config_path,new_config_path,turtle)
+
         controller = Node(
             package="turtlesim_plus_controller",
             executable="turtle_controller.py",
             namespace=turtle,
-            parameters=[],  # TODO: implement config file
+            parameters=[#new_config_path,
+                {"angular_gain": 100.0},
+                 {"linear_gain": 25.0}
+                ],
         )
         launch_description.add_action(controller)
 
@@ -69,6 +77,9 @@ def create_scheduler(context: LaunchContext, launch_description:LaunchDescriptio
 
 def generate_launch_description():
     launch_description = LaunchDescription()
+    
+    config_launch_arg = DeclareLaunchArgument('config_path',default_value='controller_config_1.yaml')
+    config_path = LaunchConfiguration('config_path')
 
     turtlesim_plus = Node(
         package="turtlesim_plus",
@@ -99,14 +110,14 @@ def generate_launch_description():
     #         ]
     #     )
     # )
-
+    launch_description.add_action(config_launch_arg)
     launch_description.add_action(path_generator)
     launch_description.add_action(turtlesim_plus)
     # launch_description.add_action(exit_event_handler)
     launch_description.add_action(remove_turtle1)
-    launch_description.add_action(OpaqueFunction(function=spawn_turtle, args=[launch_description]))
 
-    launch_description.add_action(OpaqueFunction(function=create_controller, args=[launch_description]))
+    launch_description.add_action(OpaqueFunction(function=spawn_turtle, args=[launch_description]))
+    launch_description.add_action(OpaqueFunction(function=create_controller, args=[launch_description,config_path]))
     launch_description.add_action(OpaqueFunction(function=create_scheduler, args=[launch_description]))
     launch_description.add_action(status_checker)
     return launch_description
